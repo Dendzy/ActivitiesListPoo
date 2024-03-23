@@ -7,6 +7,7 @@ import br.com.yagocode.Exceptions.RemedioInexistenteException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,11 +32,41 @@ public class FarmacioGUI extends JFrame {
         setLayout(new GridLayout(2,1));
         setResizable(false);
         sistema = new SistemaFarmacia();
+        if(sistema.isEmpty()) JOptionPane.showMessageDialog(null,"Erro ao carregar os dados!");
         //Definindo o título.
         titulo = new JLabel("Seja Bem vindo ao Sistema Farmácia!");
         titulo.setFont(FONTE_TITULO);
         painelTitulo = new JPanel();
         painelTitulo.add(titulo);
+        //Configurando o menu
+        JMenuBar menu = new JMenuBar();
+        setJMenuBar(menu);
+        JMenu cadastroMenu = new JMenu("Cadastrar");
+        JMenuItem cadastroMenuItem = new JMenuItem("Cadastrar Remédio");
+        cadastroMenuItem.addActionListener(e -> janelaCadastro.mostrar());
+        cadastroMenu.add(cadastroMenuItem);
+        JMenu pesquisaMenu = new JMenu("Pesquisar");
+        JMenuItem pesquisaMenuItem = new JMenuItem("Pesquisar Remédio");
+        pesquisaMenuItem.addActionListener(e -> janelaPesquisa.mostrar());
+        pesquisaMenu.add(pesquisaMenuItem);
+        JMenu removeMenu = new JMenu("Remover");
+        JMenuItem removeMenuItem = new JMenuItem("Remover Remédio");
+        removeMenuItem.addActionListener(e -> logicaRemover());
+        removeMenu.add(removeMenuItem);
+        JMenu salvarMenu = new JMenu("Salvar");
+        JMenuItem salvarMenuItem = new JMenuItem("Salvar Dados");
+        salvarMenu.add(salvarMenuItem);
+        salvarMenuItem.addActionListener(e -> {
+            try {
+                sistema.salvarDados();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,"Erro ao Salvar Dados");
+            }
+        });
+        menu.add(cadastroMenu);
+        menu.add(pesquisaMenu);
+        menu.add(removeMenu);
+        menu.add(salvarMenu);
         //Configurando os Botões
         botaoCadastro = new JButton("Cadastrar Remédio");
         botaoCadastro.setFont(FONTE_BOTOES);
@@ -46,16 +77,7 @@ public class FarmacioGUI extends JFrame {
         botaoPesquisa.addActionListener(e -> janelaPesquisa.mostrar());
         botaoPesquisa.setFont(FONTE_BOTOES);
         removerRemedio = new JButton("Remover Remédio");
-        removerRemedio.addActionListener(e -> {
-            String codigo = JOptionPane.showInputDialog(this,"Digite o código do Remédio!");
-            try {
-                if(sistema.removeRemedioDaLista(codigo)) {
-                    JOptionPane.showMessageDialog(this,"Remédio Removido!");
-                }
-            } catch (RemedioInexistenteException i) {
-                JOptionPane.showMessageDialog(this,"Esse remédio não Existe!");
-            }
-        });
+        removerRemedio.addActionListener(e -> logicaRemover());
         removerRemedio.setFont(FONTE_BOTOES);
         painelBotoes = new JPanel();
         painelBotoes.setLayout(new FlowLayout());
@@ -65,8 +87,18 @@ public class FarmacioGUI extends JFrame {
         //Adicionando os painéis ao painel principal;
         getContentPane().add(painelTitulo);
         getContentPane().add(painelBotoes);
-    }
 
+    }
+    public void logicaRemover() {
+        String codigo = JOptionPane.showInputDialog(this,"Digite o código do Remédio!");
+        try {
+            if(sistema.removeRemedioDaLista(codigo)) {
+                JOptionPane.showMessageDialog(this,"Remédio Removido!");
+            }
+        } catch (RemedioInexistenteException i) {
+            JOptionPane.showMessageDialog(this,"Esse remédio não Existe!");
+        }
+    }
     public class FarmaciaCadastroGUI extends JFrame {
         private FarmaciaInterface sistema;
         private JFrame janelaPrincipal;

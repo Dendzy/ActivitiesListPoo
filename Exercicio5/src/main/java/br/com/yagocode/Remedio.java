@@ -1,8 +1,9 @@
 package br.com.yagocode;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Remedio implements Comparable<Remedio> {
+public class Remedio implements Comparable<Remedio>, Serializable {
     private String nome;
     private String codigo;
     private double preco;

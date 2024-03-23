@@ -49,9 +49,9 @@ public class SistemaFarmaciaTest {
                 ANALGESICOS, TipoRemedio.TIPO_COMPRIMIDO);
         assertTrue(sistema.cadastrarRemedio(remedioTeste2));
         assertTrue(sistema.tamanho() == 2);
-        assertTrue(sistema.removeRemedioDaLista(remedioTeste1));
+        assertTrue(sistema.removeRemedioDaLista(remedioTeste1.getCodigo()));
         assertThrows(RemedioInexistenteException.class, ()->
-                sistema.removeRemedioDaLista(remedioTeste1));
+                sistema.removeRemedioDaLista(remedioTeste1.getCodigo()));
         assertTrue(sistema.tamanho() == 1);
     }
 

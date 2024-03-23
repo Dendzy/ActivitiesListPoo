@@ -3,13 +3,17 @@ package br.com.yagocode;
 import br.com.yagocode.Exceptions.RemedioExistenteException;
 import br.com.yagocode.Exceptions.RemedioInexistenteException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public interface FarmaciaInterface {
-    public boolean cadastrarRemedio(Remedio remedio) throws RemedioExistenteException;
-    public boolean removeRemedioDaLista(String codigo) throws RemedioInexistenteException;
-    public boolean adicionaRemedioPorQuantidade(int quantidade, String codigo) throws RemedioInexistenteException;
-    public boolean removeRemedioPorQuantidade(int quantidade,String codigo) throws RemedioInexistenteException;
-    public ArrayList<Remedio> pesquisaPeloCodigo(String codigo);
-    public ArrayList<Remedio> pesquisaPeloNome(String nome);
+    boolean cadastrarRemedio(Remedio remedio) throws RemedioExistenteException;
+    boolean removeRemedioDaLista(String codigo) throws RemedioInexistenteException;
+    boolean adicionaRemedioPorQuantidade(int quantidade, String codigo) throws RemedioInexistenteException;
+    boolean removeRemedioPorQuantidade(int quantidade,String codigo) throws RemedioInexistenteException;
+    ArrayList<Remedio> pesquisaPeloCodigo(String codigo);
+    ArrayList<Remedio> pesquisaPeloNome(String nome);
+    boolean isEmpty();
+    void salvarDados() throws IOException;
+
 }
